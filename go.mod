@@ -1,6 +1,6 @@
 module main.go
 
-go 1.23.5
+go 1.23.4
 
 require (
 	github.com/denisenkom/go-mssqldb v0.12.3

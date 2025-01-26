@@ -5,17 +5,17 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"os"
 
 	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/go-sql-driver/mysql"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	_ "github.com/lib/pq"
+    "github.com/joho/godotenv"
 )
 
-var token = "8182803356:AAFiIxeq5F8Wbfzd-zk6dNQBT0W8volbSgA" // Add BotToken from BotFather here
-
-type SearchInfo struct {
-	Table   string
+type Table struct {
+	Name   string
 	Storage string
 	Port    string
 }
@@ -29,7 +29,7 @@ var (
 func testConnection(driver, connStr string) error {
 	db, err := sql.Open(driver, connStr)
 	if err != nil {
-		return fmt.Errorf("connection error: %v", err)
+		return fmt.Errorf("Lỗi kết nối: %v", err)
 	}
 	defer db.Close()
 
@@ -38,27 +38,27 @@ func testConnection(driver, connStr string) error {
 
 func executeQuery(query string) (string, error) {
 	if currentConnStr == "" {
-		return "", fmt.Errorf("no database connection established. Use /connect first")
+		return "", fmt.Errorf("Chưa kết nối database. Hãy /connect trước")
 	}
 
 	// Open database connection
 	db, err := sql.Open(currentDriver, currentConnStr)
 	if err != nil {
-		return "", fmt.Errorf("connection error: %v", err)
+		return "", fmt.Errorf("Lỗi kết nối: %v", err)
 	}
 	defer db.Close()
 
 	// Execute query
 	rows, err := db.Query(query)
 	if err != nil {
-		return "", fmt.Errorf("query error: %v", err)
+		return "", fmt.Errorf("Lỗi truy vấn: %v", err)
 	}
 	defer rows.Close()
 
 	// Get column names
 	columns, err := rows.Columns()
 	if err != nil {
-		return "", fmt.Errorf("columns error: %v", err)
+		return "", fmt.Errorf("Lỗi cột: %v", err)
 	}
 
 	// Prepare a slice to hold the rows
@@ -75,7 +75,7 @@ func executeQuery(query string) (string, error) {
 
 		// Scan row values
 		if err := rows.Scan(valPtrs...); err != nil {
-			return "", fmt.Errorf("scan error: %v", err)
+			return "", fmt.Errorf("Lỗi scan: %v", err)
 		}
 
 		// Create a map to hold column-value pairs
@@ -104,8 +104,14 @@ func executeQuery(query string) (string, error) {
 }
 
 func main() {
-	searchInfo := SearchInfo{
-		Table: "Sheet1",
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Lỗi .env")
+	}
+	var token = os.Getenv("TOKEN")
+
+	data4Search := Table{
+		Name: "Sheet1",
 		Port:  "Column_2",
 	}
 
@@ -201,7 +207,7 @@ func main() {
 				result, err := executeQuery(query)
 				if err != nil {
 					errMsg := tgbotapi.NewMessage(update.Message.Chat.ID,
-						fmt.Sprintf("Lỗi xảy ra: %v", err))
+						fmt.Sprintf("Lỗi : %v", err))
 					bot.Send(errMsg)
 					continue
 				}
@@ -221,12 +227,12 @@ func main() {
 				portPon := update.Message.Text
 
 				// Construct the query with LIKE to find the Port Pon
-				query := fmt.Sprintf("SELECT * FROM %s WHERE %s LIKE '%%%s%%'", searchInfo.Table, searchInfo.Port, portPon)
+				query := fmt.Sprintf("SELECT * FROM %s WHERE %s LIKE '%%%s%%'", data4Search.Name, data4Search.Port, portPon)
 
 				// Execute the query
 				result, err := executeQuery(query)
 				if err != nil {
-					errMsg := tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("Xảy ra lỗi: %v", err))
+					errMsg := tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("Lỗi: %v", err))
 					bot.Send(errMsg)
 					continue
 				}

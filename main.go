@@ -11,7 +11,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	_ "github.com/lib/pq"
-    "github.com/joho/godotenv"
 )
 
 type Table struct {

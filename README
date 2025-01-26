@@ -1,5 +1,3 @@
----
-
 ## Telegram Bot Setup Guide
 
 Follow these steps to set up and run your Telegram bot:
@@ -48,7 +46,3 @@ go run main.go
 
 ### 8. Enjoy!
 You're all set! Enjoy using the bot and querying your database.
-
----
-
-Let me know if you'd like any further adjustments!

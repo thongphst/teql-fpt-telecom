@@ -104,11 +104,10 @@ func executeQuery(query string) (string, error) {
 }
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Lỗi .env")
-	}
 	var token = os.Getenv("TOKEN")
+	if token == "" {
+		log.Fatal("Missing TOKEN environment variable")
+	}
 
 	data4Search := Table{
 		Name: "Sheet1",

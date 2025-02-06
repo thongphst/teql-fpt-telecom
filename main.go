@@ -148,13 +148,13 @@ func main() {
 				bot.Send(helpMsg)
 
 			case "connect":
-				//msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Hãy nhập chuỗi kết nối database.")
-				//bot.Send(msg)
+				msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Hãy nhập chuỗi kết nối database.")
+				bot.Send(msg)
 
-				//update = <-updates // Get the next update (user input)
+				update = <-updates // Get the next update (user input)
 
-				//connStr := update.Message.Text
-				connStr :="postgresql://neondb_owner:npg_mNH1XnzoLTQ6@ep-raspy-shape-a8fyxfop-pooler.eastus2.azure.neon.tech/neondb?sslmode=require"
+				connStr := update.Message.Text
+				//connStr :="postgresql://neondb_owner:npg_mNH1XnzoLTQ6@ep-raspy-shape-a8fyxfop-pooler.eastus2.azure.neon.tech/neondb?sslmode=require"
 				if connStr == "" {
 					errMsg := tgbotapi.NewMessage(update.Message.Chat.ID, "Chuỗi kết nối không hợp lệ.")
 					bot.Send(errMsg)
@@ -169,10 +169,10 @@ func main() {
 					driver = "mysql"
 				case strings.Contains(connStr, "sqlserver://") || strings.Contains(connStr, "server="):
 					driver = "sqlserver"
-				//default:
-					//errMsg := tgbotapi.NewMessage(update.Message.Chat.ID, "Database này không được hỗ trợ.")
-					//bot.Send(errMsg)
-					//continue
+				default:
+					errMsg := tgbotapi.NewMessage(update.Message.Chat.ID, "Database này không được hỗ trợ.")
+					bot.Send(errMsg)
+					continue
 				}
 
 				err := testConnection(driver, connStr)

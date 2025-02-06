@@ -138,10 +138,11 @@ func main() {
 			switch update.Message.Command() {
 			case "start":
 				helpMsg := tgbotapi.NewMessage(update.Message.Chat.ID,
-					"*ᴛɪ̀ᴍ ᴋɪᴇ̂́ᴍ ᴛᴜ̉ ᴍᴀ̣ɴɢ* 🔎\n\n"+
+					"*ᴛɪ̀ᴍ ᴋɪᴇ̂́ᴍ* 🔎\n\n"+
 						"`Các chức năng:`\n"+
 						"*/connect*\n"+
-						"*/search*\n"+
+						"*/search tủ*\n"+
+						"*/search đối tượng*\n"+
 						"*/query* `〔lệnh truy vấn〕`")
 				helpMsg.ParseMode = tgbotapi.ModeMarkdown
 				bot.Send(helpMsg)

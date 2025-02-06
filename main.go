@@ -172,7 +172,7 @@ func main() {
 				//default:
 					//errMsg := tgbotapi.NewMessage(update.Message.Chat.ID, "Database này không được hỗ trợ.")
 					//bot.Send(errMsg)
-					continue
+					//continue
 				}
 
 				err := testConnection(driver, connStr)

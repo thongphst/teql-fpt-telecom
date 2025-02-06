@@ -153,7 +153,7 @@ func main() {
 				//update = <-updates // Get the next update (user input)
 
 				//connStr := update.Message.Text
-				connStr :="postgresql://neondb_owner:npg_mNH1XnzoLTQ6@ep-raspy-shape-a8fyxfop-pooler.eastus2.azure.neon.tech/neondb?sslmode=require"
+				connStr :=postgresql://neondb_owner:npg_mNH1XnzoLTQ6@ep-raspy-shape-a8fyxfop-pooler.eastus2.azure.neon.tech/neondb?sslmode=require
 				if connStr == "" {
 					errMsg := tgbotapi.NewMessage(update.Message.Chat.ID, "Chuỗi kết nối không hợp lệ.")
 					bot.Send(errMsg)
